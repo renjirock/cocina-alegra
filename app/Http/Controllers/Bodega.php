@@ -19,8 +19,12 @@ class Bodega extends Controller
     }
     public function get_ingredients()
     {
-        $ingredients = Ingredient::all();
-        return view('ingredients', ['ingredients' => $ingredients]);
+        try {
+            $ingredients = Ingredient::all();
+            return view('ingredients', ['ingredients' => $ingredients]);
+        } catch (\Throwable $th) {
+            return redirect()->route('index')->with('warning', 'Se genero un error');
+        }
     }
     public static function ingredient_is_available($id)
     {

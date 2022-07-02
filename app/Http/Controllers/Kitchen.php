@@ -58,20 +58,25 @@ class Kitchen extends Controller
 
     public function get_orders()
     {
-        $orders = Order::all();
-        $return_order = array();
-        foreach ($orders as $order) {
-            $get_prescription = Prescription::select('name')->where('id', $order->prescription_id)->first();
-            array_push($return_order,
-                [
-                    'id' => $order->id,
-                    'name'          => $get_prescription->name,
-                    'is_available'  => $order->is_available ? 'terminada ' : 'En preparacion',
-                    'created_at'    => $order->created_at,
-                ]
-            );
+        try {
+            $orders = Order::all();
+            $return_order = array();
+            foreach ($orders as $order) {
+                $get_prescription = Prescription::select('name')->where('id', $order->prescription_id)->first();
+                array_push($return_order,
+                    [
+                        'id' => $order->id,
+                        'name'          => $get_prescription->name,
+                        'is_available'  => $order->is_available ? 'terminada ' : 'En preparacion',
+                        'created_at'    => $order->created_at,
+                    ]
+                );
+            }
+            return view('orders', ['orders' => $return_order]);
+        } catch (\Throwable $th) {
+            return redirect()->route('index')->with('warning', 'Se genero un error');
         }
-        return view('orders', ['orders' => $return_order]);
+
     }
 
     public static function get_orders_not_finished()
