@@ -15,12 +15,6 @@ ARG PGID=33
 RUN chown -R www-data:www-data /var/www
 RUN chmod 755 /var/www
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN chmod +x /usr/bin/composer
-ENV COMPOSER_ALLOW_SUPERUSER 1
-
-RUN composer install
-
 # RUN composer install \
 #     && php artisan key:generate \
 #     && sail artisan cache:clear \
